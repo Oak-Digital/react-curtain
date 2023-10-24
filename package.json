@@ -1,6 +1,6 @@
 {
-    "name": "vite-library-starter",
-    "private": true,
+    "name": "@oak-digital/react-curtain",
+    "private": false,
     "license": "MIT",
     "version": "0.0.0",
     "type": "module",
