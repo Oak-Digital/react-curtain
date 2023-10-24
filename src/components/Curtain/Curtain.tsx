@@ -94,10 +94,10 @@ const Curtain = ({
                         },
                     },
                 },
-                effect({ context, send }) {
+                effect({ send }) {
                     send('EXIT');
 
-                    return ({ context, send }) => {
+                    return () => {
                         const newChildren = childrenQueue.current.pop() || currentChildren;
                         setCurrentChildren(newChildren);
                         childrenQueue.current = [];
