@@ -24,7 +24,7 @@ export interface CurtainProps {
     children?: ReactNode;
 };
 
-const Curtain = ({
+export const Curtain = ({
     children,
     autoSwitch = false,
     visible = false,
@@ -157,5 +157,3 @@ const Curtain = ({
         </>
     );
 };
-
-export default Curtain;

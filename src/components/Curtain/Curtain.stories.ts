@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import Curtain from './Curtain';
+import { Curtain } from './Curtain';
 
 const meta = {
     title: 'Example/Curtain',

@@ -1,1 +1,1 @@
-export { default } from './Curtain';
+export * from './Curtain';
