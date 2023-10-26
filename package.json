@@ -6,19 +6,28 @@
     "packageManager": "pnpm@8.7.5",
     "type": "module",
     "files": [
+        "dist",
         "lib"
     ],
-    "main": "./lib/cjs/main.js",
-    "module": "./lib/esm/main.js",
-    "types": "./lib/esm/main.d.ts",
+    "main": "./dist/main.umd.cjs",
+    "module": "./dist/main.js",
+    "types": "./dist/main.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/main.js",
+            "require": "./dist/main.umd.cjs"
+        },
+        "./dist/style.css": {
+            "import": "./dist/style.css",
+            "require": "./dist/style.css"
+        }
+    },
     "scripts": {
         "dev": "vite",
         "preview": "vite preview",
         "demo:build": "vite build",
         "demo:build:gh-pages": "vite build --base=/$(node -p \"require('./package.json').name.split('/').pop()\")/",
-        "build": "rimraf lib && pnpm build:cjs && pnpm build:esm",
-        "build:cjs": "tsc -p tsconfig.build.json",
-        "build:esm": "tsc -p tsconfig.build.esm.json",
+        "build": "vite build",
         "lint": "eslint .",
         "format": "prettier -w .",
         "test": "vitest",
@@ -55,12 +64,13 @@
         "storybook": "^7.5.1",
         "typescript": "^4.9.5",
         "vite": "^4.3.5",
+        "vite-plugin-dts": "^3.6.1",
         "vitest": "^0.28.5"
     },
     "peerDependencies": {
-        "framer-motion": "^10.16.4",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0"
+        "framer-motion": "10.x",
+        "react": "^18.x",
+        "react-dom": "^18.x"
     },
     "dependencies": {
         "@cassiozen/usestatemachine": "^1.0.1"

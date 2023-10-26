@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Curtain } from './Curtain';
 
 const meta = {
-    title: 'Example/Curtain',
+    title: 'Components/Curtain',
     component: Curtain,
     tags: ['autodocs'],
 } satisfies Meta<typeof Curtain>;

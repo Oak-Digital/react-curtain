@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, Variants, motion } from 'framer-motion';
 import useStateMachine, { t } from '@cassiozen/usestatemachine';
+import './curtain.css';
 
 export interface CurtainProps {
     autoSwitch?: boolean;
@@ -21,8 +22,13 @@ export interface CurtainProps {
      * Duration in seconds
      */
     duration?: number;
+    /**
+     * The curtain's css position
+     * Absolute can be used to make the curtain overlap inside the nearest relative ancestor
+     */
+    position?: 'fixed' | 'absolute';
     children?: ReactNode;
-};
+}
 
 export const Curtain = ({
     children,
@@ -31,6 +37,7 @@ export const Curtain = ({
     curtainChildren,
     curtainClassName,
     duration = 0.45,
+    position = 'fixed',
 }: CurtainProps) => {
     const childrenQueue = useRef<ReactNode[]>([]);
     const [currentChildren, setCurrentChildren] = useState(children);
@@ -98,8 +105,10 @@ export const Curtain = ({
                     send('EXIT');
 
                     return () => {
-                        const newChildren = childrenQueue.current.pop() || currentChildren;
-                        setCurrentChildren(newChildren);
+                        const newChildren = childrenQueue.current.pop();
+                        if (newChildren) {
+                            setCurrentChildren(newChildren);
+                        }
                         childrenQueue.current = [];
                     };
                 },
@@ -112,7 +121,7 @@ export const Curtain = ({
             return;
         }
 
-        childrenQueue.current.push(children);
+        childrenQueue.current = [children];
         if (autoSwitch) {
             send('START');
         } else if (!visible) {
@@ -141,8 +150,10 @@ export const Curtain = ({
                         initial="enter"
                         animate="center"
                         exit="exit"
-                        className={curtainClassName}
-                        style={{ position: 'fixed', top: 0, bottom: 0 }}
+                        className={`react-curtain ${curtainClassName}`}
+                        style={{
+                            position,
+                        }}
                         onAnimationComplete={(animationName) => {
                             if (animationName === 'center') {
                                 send('CENTER');
