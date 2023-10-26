@@ -7,9 +7,9 @@ import pkg from './package.json';
 export default defineConfig({
     plugins: [
         react(),
-        dts({
+        ...(process.env.DISABLE_DTS ? [] : [dts({
             rollupTypes: true,
-        }),
+        })]),
     ],
     build: {
         outDir: 'dist',
