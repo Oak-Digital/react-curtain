@@ -1,4 +1,4 @@
-import{C as c}from"./Curtain-9964987f.js";import"./index-8db94870.js";import"./_commonjsHelpers-042e6b4d.js";const m={title:"Components/Curtain",component:c,tags:["autodocs"]},r={args:{visible:!1,curtainClassName:"bg-dark",children:"Curtain"}},a={args:{visible:!1,curtainClassName:"bg-dark text-white",curtainChildren:"This is on the curtain",children:"Curtain"}};var e,s,t;r.parameters={...r.parameters,docs:{...(e=r.parameters)==null?void 0:e.docs,source:{originalSource:`{
+import{C as c}from"./Curtain-df0ecbf5.js";import"./index-8db94870.js";import"./_commonjsHelpers-042e6b4d.js";const m={title:"Components/Curtain",component:c,tags:["autodocs"]},r={args:{visible:!1,curtainClassName:"bg-dark",children:"Curtain"}},a={args:{visible:!1,curtainClassName:"bg-dark text-white",curtainChildren:"This is on the curtain",children:"Curtain"}};var e,s,t;r.parameters={...r.parameters,docs:{...(e=r.parameters)==null?void 0:e.docs,source:{originalSource:`{
   args: {
     visible: false,
     curtainClassName: 'bg-dark',
@@ -12,4 +12,4 @@ import{C as c}from"./Curtain-9964987f.js";import"./index-8db94870.js";import"./_
     children: 'Curtain'
   }
 }`,...(o=(n=a.parameters)==null?void 0:n.docs)==null?void 0:o.source}}};const C=["Primary","WithCurtainChildren"];export{r as Primary,a as WithCurtainChildren,C as __namedExportsOrder,m as default};
-//# sourceMappingURL=Curtain.stories-e174bf8d.js.map
+//# sourceMappingURL=Curtain.stories-a7048c09.js.map
