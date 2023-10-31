@@ -126,15 +126,14 @@ export const Curtain = ({
         childrenQueue.current = [children];
         if (autoSwitch) {
             send('START');
-        } else if (!visible) {
+        } else if (state.value === 'waiting') {
             setCurrentChildren(children);
             childrenQueue.current = [];
         }
     }
 
     if (childrenWrapper !== currentChildrenWrapper.current) {
-        if (!visible) {
-            // setCurrentChildrenWrapper(childrenWrapper);
+        if (state.value === 'waiting') {
             currentChildrenWrapper.current = childrenWrapper;
         }
     }
@@ -173,7 +172,7 @@ export const Curtain = ({
                     </motion.div>
                 )}
             </AnimatePresence>
-            {visible && currentChildrenWrapper.current ? currentChildrenWrapper.current(currentChildren) : currentChildren}
+            {state.value !== 'waiting' && currentChildrenWrapper.current ? currentChildrenWrapper.current(currentChildren) : currentChildren}
         </>
     );
 };
