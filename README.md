@@ -26,3 +26,37 @@ const Layout = ({ children, isLoading }) => {
 
 export default Layout
 ```
+
+## API
+
+See [storybook](https://oak-digital.github.io/react-curtain/) for description of props
+
+## Note about context
+
+If a context changes, `react-curtain` will render the updated context immediatly. To avoid this, you should provide a "fake" context, that `react-curtain` will make sure only lives while animating the curtain.
+
+To provide a "fake" context you can use the `childrenWrapper` prop ([example](./src/stories/CurtainContext/index.tsx)) and provide a function that renders the current context.
+
+```tsx
+const { counter, incrementCounter } = useMyContext();
+
+return (
+    <Curtain childrenWrapper={
+        useCallback((c: ReactNode) => (
+            <MyContext.Provider
+                value={{
+                    counter,
+                    incrementCounter,
+                }}
+            >
+                {c}
+            </MyContext.Provider>
+        ), [counter, incrementCounter])
+    }>
+        <div>
+            {/* Button that renders counter from context */}
+            <Button onClick={onClick} />
+        </div>
+    </Curtain>
+)
+```

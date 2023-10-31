@@ -27,10 +27,15 @@ export interface CurtainProps {
      * Absolute can be used to make the curtain overlap inside the nearest relative ancestor
      */
     position?: 'fixed' | 'absolute';
+    /**
+     * A function that will be called with the children that should be shown while the curtain is visible.
+     */
+    childrenWrapper?: (children: ReactNode) => ReactNode;
     children?: ReactNode;
 }
 
 export const Curtain = ({
+    childrenWrapper,
     children,
     autoSwitch = false,
     visible = false,
@@ -41,6 +46,7 @@ export const Curtain = ({
 }: CurtainProps) => {
     const childrenQueue = useRef<ReactNode[]>([]);
     const [currentChildren, setCurrentChildren] = useState(children);
+    const currentChildrenWrapper = useRef(childrenWrapper);
     const [counterId, setCounterId] = useState(0);
 
     const curtainVariants = useMemo(
@@ -116,11 +122,7 @@ export const Curtain = ({
         },
     });
 
-    useEffect(() => {
-        if (children === currentChildren || childrenQueue.current.includes(children)) {
-            return;
-        }
-
+    if (children !== currentChildren && !childrenQueue.current.includes(children)) {
         childrenQueue.current = [children];
         if (autoSwitch) {
             send('START');
@@ -128,7 +130,14 @@ export const Curtain = ({
             setCurrentChildren(children);
             childrenQueue.current = [];
         }
-    }, [children, autoSwitch]);
+    }
+
+    if (childrenWrapper !== currentChildrenWrapper.current) {
+        if (!visible) {
+            // setCurrentChildrenWrapper(childrenWrapper);
+            currentChildrenWrapper.current = childrenWrapper;
+        }
+    }
 
     useEffect(() => {
         state.context.externalVisible = visible;
@@ -164,7 +173,7 @@ export const Curtain = ({
                     </motion.div>
                 )}
             </AnimatePresence>
-            {currentChildren}
+            {visible && currentChildrenWrapper.current ? currentChildrenWrapper.current(currentChildren) : currentChildren}
         </>
     );
 };
