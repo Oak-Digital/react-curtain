@@ -122,11 +122,12 @@ export const Curtain = ({
         },
     });
 
+
     if (children !== currentChildren && !childrenQueue.current.includes(children)) {
         childrenQueue.current = [children];
         if (autoSwitch) {
             send('START');
-        } else if (state.value === 'waiting') {
+        } else if (state.value === 'waiting' && !visible) {
             setCurrentChildren(children);
             childrenQueue.current = [];
         }
