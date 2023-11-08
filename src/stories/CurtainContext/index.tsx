@@ -1,21 +1,20 @@
-import { FC, ReactNode, useCallback, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { Curtain } from '../../components';
 import { CurtainContext, CurtainContextProvider, useCurtainContext } from './context';
 
 export interface CurtainContextComponentProps {
-    withChildrenWrapper?: boolean;
+    withContexts?: boolean;
 }
 
-export const CurtainContextComponent = ({ withChildrenWrapper = true }: CurtainContextComponentProps) => {
+export const CurtainContextComponent = ({ withContexts = true }: CurtainContextComponentProps) => {
     return (
         <CurtainContextProvider>
-            <CurtainContextComponentInner withChildrenWrapper={withChildrenWrapper} />
+            <CurtainContextComponentInner withContexts={withContexts} />
         </CurtainContextProvider>
     );
 };
 
-export const CurtainContextComponentInner = ({ withChildrenWrapper }: CurtainContextComponentProps) => {
-    const { counter, incrementCounter } = useCurtainContext();
+export const CurtainContextComponentInner = ({ withContexts }: CurtainContextComponentProps) => {
     const [visible, setVisible] = useState(false);
     const onClick = async () => {
         setVisible(true);
@@ -24,22 +23,12 @@ export const CurtainContextComponentInner = ({ withChildrenWrapper }: CurtainCon
 
         setVisible(false);
     };
-    const wrapperFunction = useCallback(
-        (c: ReactNode) => (
-            <CurtainContext.Provider
-                value={{
-                    counter,
-                    incrementCounter,
-                }}
-            >
-                {c}
-            </CurtainContext.Provider>
-        ),
-        [counter, incrementCounter]
-    );
+
+    const memoedContexts = useMemo(() => (withContexts ? [CurtainContext] : []), [withContexts]);
+
     return (
         <div>
-            <Curtain visible={visible} childrenWrapper={withChildrenWrapper ? wrapperFunction : undefined}>
+            <Curtain visible={visible} contexts={memoedContexts}>
                 <div style={{ textAlign: 'right' }}>
                     <Button onClick={onClick} />
                 </div>

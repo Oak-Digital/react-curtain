@@ -1,7 +1,8 @@
-import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { Context, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, Variants, motion } from 'framer-motion';
 import useStateMachine, { t } from '@cassiozen/usestatemachine';
 import './curtain.css';
+import { FakeContexts } from '../FakeContext/FakeContexts';
 
 export interface CurtainProps {
     autoSwitch?: boolean;
@@ -28,14 +29,13 @@ export interface CurtainProps {
      */
     position?: 'fixed' | 'absolute';
     /**
-     * A function that will be called with the children that should be shown while the curtain is visible.
-     */
-    childrenWrapper?: (children: ReactNode) => ReactNode;
+    * The contexts that should be "faked" such that the children can access the old data from the contexts.
+    */
+    contexts?: Context<any>[];
     children?: ReactNode;
 }
 
 export const Curtain = ({
-    childrenWrapper,
     children,
     autoSwitch = false,
     visible = false,
@@ -43,10 +43,10 @@ export const Curtain = ({
     curtainClassName,
     duration = 0.45,
     position = 'fixed',
+    contexts,
 }: CurtainProps) => {
     const childrenQueue = useRef<ReactNode[]>([]);
     const [currentChildren, setCurrentChildren] = useState(children);
-    const currentChildrenWrapper = useRef(childrenWrapper);
     const [counterId, setCounterId] = useState(0);
 
     const curtainVariants = useMemo(
@@ -133,12 +133,6 @@ export const Curtain = ({
         }
     }
 
-    if (childrenWrapper !== currentChildrenWrapper.current) {
-        if (state.value === 'waiting') {
-            currentChildrenWrapper.current = childrenWrapper;
-        }
-    }
-
     useEffect(() => {
         state.context.externalVisible = visible;
 
@@ -173,7 +167,9 @@ export const Curtain = ({
                     </motion.div>
                 )}
             </AnimatePresence>
-            {state.value !== 'waiting' && currentChildrenWrapper.current ? currentChildrenWrapper.current(currentChildren) : currentChildren}
+            <FakeContexts locked={state.value !== 'waiting' || visible} contexts={contexts}>
+                {currentChildren}
+            </FakeContexts>
         </>
     );
 };
