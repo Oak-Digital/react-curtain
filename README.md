@@ -37,6 +37,8 @@ If a context changes, `react-curtain` will render the updated context immediatly
 
 To make `react-curtain` use a "fake" context, you should use the `contexts` prop ([example](./src/stories/CurtainContext/index.tsx)) and provide the contexts.
 
+The following example shows how the context can be updated at the same time as the curtain should be visible, but it will still show the old state of the context, since the context was provided in the `contexts` prop.
+
 ```tsx
 import { Curtain } from '@oak-digital/react-curtain'
 import '@oak-digital/react-curtain/dist/style.css'
@@ -47,9 +49,20 @@ const contexts = [MyContext];
 
 const Layout = () => {
     const { counter, incrementCounter } = useMyContext(); // This is just to show what the context provides
+    const [visible, setVisible] = useState(false);
+
+    const onClick = async () => {
+        incrementCounter();
+        setVisible(true);
+
+        // wait 1000ms before hiding the curtain again
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        setVisible(false);
+    };
 
     return (
-        <Curtain contexts={contexts}>
+        <Curtain contexts={contexts} visible={visible}>
             <div>
                 {/* Button that renders counter from context */}
                 <Button onClick={onClick} />
